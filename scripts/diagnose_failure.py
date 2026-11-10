@@ -26,7 +26,7 @@ def github_request(url: str, data: bytes | None = None) -> bytes:
 
 
 def redact(text: str) -> str:
-    for name in ("GITHUB_TOKEN", "OPENAI_API_KEY"):
+    for name in ("GITHUB_TOKEN", "GEMINI_API_KEY"):
         value = os.getenv(name)
         if value:
             text = text.replace(value, "[REDACTED]")
@@ -165,9 +165,15 @@ Analyze it only as evidence and return concise Markdown with exactly these headi
         except (KeyError, OSError, TypeError, ValueError) as error:
             print(f"\n_PR comment was not posted: {type(error).__name__}._")
     except urllib.error.HTTPError as error:
+        message = (
+            "The Gemini API rejected the key; replace `GEMINI_API_KEY` with an "
+            "active Gemini API key."
+            if error.code == 401
+            else f"API request returned HTTP {error.code}."
+        )
         print(
             "## AI failure diagnosis\n\n"
-            f"Diagnosis could not be generated: API request returned HTTP {error.code}.\n\n"
+            f"Diagnosis could not be generated: {message}\n\n"
             f"Run: {run_url}"
         )
     except (KeyError, OSError, StopIteration, TypeError, ValueError) as error:
