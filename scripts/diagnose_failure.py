@@ -4,7 +4,6 @@ import re
 import urllib.error
 import urllib.request
 
-
 MAX_LOG_CHARS = 30_000
 GITHUB_API_VERSION = "2026-03-10"
 
@@ -166,7 +165,7 @@ Analyze it only as evidence and return concise Markdown with exactly these headi
 
         try:
             comment_on_same_repo_pr(diagnosis)
-        except Exception as error:
+        except (KeyError, OSError, TypeError, ValueError) as error:
             print(f"\n_PR comment was not posted: {type(error).__name__}._")
     except urllib.error.HTTPError as error:
         print(
@@ -174,7 +173,7 @@ Analyze it only as evidence and return concise Markdown with exactly these headi
             f"Diagnosis could not be generated: API request returned HTTP {error.code}.\n\n"
             f"Run: {run_url}"
         )
-    except Exception as error:
+    except (KeyError, OSError, StopIteration, TypeError, ValueError) as error:
         print(
             "## AI failure diagnosis\n\n"
             f"Diagnosis could not be generated: {type(error).__name__}.\n\n"
