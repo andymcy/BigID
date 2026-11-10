@@ -11,7 +11,10 @@ WORKDIR /app
 COPY --from=builder /install /usr/local
 COPY app/ ./app/
 
-RUN useradd -u 10001 -m appuser
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd -u 10001 -m appuser
 USER appuser
 
 EXPOSE 8000
