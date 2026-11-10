@@ -47,6 +47,6 @@ The workflow at .github/workflows/ci.yml runs on pushes to main, pull requests t
 6. Publishes the tested image to GitHub Container Registry on successful, trusted pushes to main.
 Image location: ghcr.io/andymcy/bigid:<commit-sha> (after a successful publish). The kind cluster used in CI is temporary, not a permanent staging environment.
 
-If a pipeline job fails, scripts/diagnose_failure.py can retrieve its logs and request a short diagnosis from OpenAI. Add OPENAI_API_KEY under GitHub repository → Settings → Secrets and variables → Actions to enable this. The result is written to the workflow summary; same-repository PRs may also receive a comment. The script is not given secrets for fork PRs.
+If a pipeline job fails, scripts/diagnose_failure.py retrieves failed-job logs, redacts secrets, and requests a short diagnosis from Gemini (`gemini-3.5-flash-lite`). Add `GEMINI_API_KEY` under GitHub repository → Settings → Secrets and variables → Actions to enable this. The result is written to the workflow summary; same-repository PRs may also receive a comment. The script is not given secrets for fork PRs.
 
 See the actual run results under the repository's Actions tab. Local and CI execution results should be verified before submission.
