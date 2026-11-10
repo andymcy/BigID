@@ -45,7 +45,7 @@ jobs:
         run: ruff check .
 
       - name: Test
-        run: pytest -q
+        run: python -m pytest -q
 
       - name: Demonstrate failure
         if: github.event_name == 'workflow_dispatch' && inputs.demonstrate_failure == true
